@@ -2,12 +2,16 @@ package com.springboot.ljy.service.posts;
 
 import com.springboot.ljy.domain.posts.Posts;
 import com.springboot.ljy.domain.posts.PostsRepository;
+import com.springboot.ljy.web.dto.PostListResponseDto;
 import com.springboot.ljy.web.dto.PostsResponseDto;
 import com.springboot.ljy.web.dto.PostsSaveRequestDto;
 import com.springboot.ljy.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -32,5 +36,12 @@ public class PostsService {
                 .orElseThrow(()->new IllegalArgumentException("해당 사용자가 없스빈다 id"+id));
 
         return new PostsResponseDto(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
